@@ -5,7 +5,9 @@ Place your responses inside the fenced code-blocks where indivated by comments.
 1.  Describe a reason why a join tables may be valuable.
 
   ```md
-    # < Your Response Here >
+    # Join tables are valuable because you can more easily manage updates to data. For example,
+    if you only have to update a doctor's first name on one table, you are saving yourself time and saving yourself from the
+    possibility of forgetting to update the doctor's first time in all the places.
   ```
 
 1.  Provide a database table structure and explain the Entity Relationship that
@@ -15,23 +17,34 @@ Place your responses inside the fenced code-blocks where indivated by comments.
   join table with references to `Movies` and `Profiles`.
 
   ```md
-    # < Your Response Here >
+    # A profile has many favorites.
+       A movie has many favorites.
+
+
+      Each row on the favorites table would reference a FK movie_id and a FK profile_id
   ```
 
 1.  For the above example, what needs to be added to the Model files?
 
   ```rb
   class Profile < ActiveRecord::Base
+  has_many :movies, through :favorites
+  has_many: favorites
   end
   ```
 
   ```rb
   class Movie < ActiveRecord::Base
+  has_many :profiles, through :favorites
+  has_many :favorites
   end
   ```
 
   ```rb
   class Favorite < ActiveRecord::Base
+  belongs_to :movie, inverse_of: :favorites
+  belongs_to :profile, inverse_of :favorites
+
   end
   ```
 
@@ -40,11 +53,12 @@ like to show all movies favorited by a profile on
 `http://localhost:3000/profiles/1`
 
   ```md
-    # < Your Response Here >
+    Th serializer allows you to filter certain data out of your response. The data stil exists, it's just not shown in the response to users.
   ```
 
   ```rb
   class ProfileSerializer < ActiveModel::Serializer
+  attributes :id, :given_name, :surname, :email, :movies
   end
   ```
 
@@ -52,13 +66,13 @@ like to show all movies favorited by a profile on
 the above `Movies` and `Profiles`.
 
   ```sh
-    # < Your Response Here >
+    # bin/rails generate scaffold favroites movie:references profile:references
   ```
 
 1.  What is `Dependent: Destroy` and where/why would we use it?
 
   ```md
-    # < Your Response Here >
+    # dependent destroy indentifies for rails that objects associated with the id that you are destroying also need to be destroyed
   ```
 
 1.  Think of **ANY** example where you would have a one-to-many relationship as well
@@ -66,5 +80,8 @@ as a many-to-many relationship in an application. You only need to list the
 description about the resources and how they relate to one another.
 
   ```md
-    # < Your Response Here >
+  One homeroom has many students, but one student only has one homeroom.
+  Students have many grades.
+  Classes have many grades. 
+
   ```
